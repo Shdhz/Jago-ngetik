@@ -1,25 +1,21 @@
 let startTime, currentText, timerInterval, timeLeft = 30;
 
 function startTyping() {
-    // Menonaktifkan tombol Start dan mengaktifkan tombol Reset
     document.getElementById('startButton').disabled = true;
     document.getElementById('resetButton').disabled = false;
-    
-    // Mengambil waktu yang dipilih dari dropdown
     timeLeft = parseInt(document.getElementById('timeSelect').value);
-    
-    // Menampilkan waktu yang dipilih di timer
+
     document.getElementById('timerLabel').innerText = `Time left: ${timeLeft}s`;
     
-    // Menghapus input sebelumnya dan memulai timer
+
     document.getElementById('userInput').value = "";
     document.getElementById('resultLabel').innerText = "";
     generateNewText();
     
-    // Menyimpan waktu mulai
+
     startTime = new Date().getTime();
     
-    // Memulai timer interval
+
     timerInterval = setInterval(updateTimer, 1000);
 }
 
@@ -27,22 +23,22 @@ function updateTimer() {
     timeLeft--;
     document.getElementById('timerLabel').innerText = `Time left: ${timeLeft}s`;
     
-    // Ketika waktu habis, berhenti
+
     if (timeLeft <= 0) {
         clearInterval(timerInterval);
         document.getElementById('userInput').disabled = true;
-        displayResults();  // Menampilkan hasil WPM dan akurasi
+        displayResults();
     }
 }
 
 async function fetchSampleText() {
     const response = await fetch('https://api.quotable.io/random');
     const data = await response.json();
-    return data.content; // Ambil konten dari API response
+    return data.content;
 }
 
 async function generateNewText() {
-    currentText = await fetchSampleText(); // Mengambil teks acak dari API
+    currentText = await fetchSampleText();
     document.getElementById('textDisplay').innerText = currentText;
     document.getElementById('userInput').value = "";
 }
@@ -88,7 +84,7 @@ function resetTyping() {
     document.getElementById('userInput').disabled = false;
     clearInterval(timerInterval);
     document.getElementById('timerLabel').innerText = "";
-    document.getElementById('history').innerHTML = "<strong>Typing History:</strong><br>"; // Clear history
+    document.getElementById('history').innerHTML = "<strong>Typing History:</strong><br>"; 
 }
 
 function calculateWPM(typedText, elapsedTime) {
@@ -103,15 +99,14 @@ function calculateAccuracy(typedText) {
 
 function displayResults() {
     const typedText = document.getElementById('userInput').value.trim();
-    const elapsedTime = (new Date().getTime() - startTime) / 1000; // Menghitung waktu yang telah berlalu
+    const elapsedTime = (new Date().getTime() - startTime) / 1000; 
 
     const wpm = calculateWPM(typedText, elapsedTime);
     const accuracy = calculateAccuracy(typedText);
     
-    // Menampilkan hasil WPM dan Akurasi
     document.getElementById('resultLabel').innerText = `WPM: ${wpm.toFixed(2)}, Accuracy: ${accuracy.toFixed(2)}%`;
 
-    // Menyimpan hasil dalam riwayat
+
     saveTypingHistory(wpm.toFixed(2), accuracy.toFixed(2));
 }
 
