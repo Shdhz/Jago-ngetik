@@ -31,11 +31,22 @@ function updateTimer() {
     }
 }
 
-async function fetchSampleText() {
-    const response = await fetch('https://api.quotable.io/random');
-    const data = await response.json();
-    return data.content;
+async function generateNewText() {
+    try {
+        const response = await fetch('https://api.quotable.io/random');
+        if (!response.ok) {
+            throw new Error("Failed to fetch quote");
+        }
+        const data = await response.json();
+        currentText = data.content;
+    } catch (error) {
+        console.error("Error fetching quote:", error);
+        currentText = "Typing challenge: The quick brown fox jumps over the lazy dog.";
+    }
+    document.getElementById('textDisplay').innerText = currentText;
+    document.getElementById('userInput').value = "";
 }
+
 
 async function generateNewText() {
     currentText = await fetchSampleText();
