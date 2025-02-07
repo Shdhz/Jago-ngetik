@@ -33,7 +33,7 @@ function updateTimer() {
 
 async function generateNewText() {
     try {
-        const response = await fetch('https://api.quotable.io/random');
+        const response = await fetch('https://zenquotes.io/api/random/);
         if (!response.ok) {
             throw new Error("Failed to fetch quote");
         }
